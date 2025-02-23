@@ -13,20 +13,28 @@
 template <typename T>
 std::set<T> setIntersection(std::set<T>& s1, std::set<T>& s2)
 {
+    std::set<T> sharedSet;
 
-
-
-
-
+    for(typename std::set<T>::iterator s1_it = s1.begin(); s1_it != s1.end(); ++s1_it) {  // n iterations
+        // If the element is in s2 too
+        if(s2.find(*s1_it) != s2.end()) {
+            sharedSet.insert(*s1_it);
+        }
+    }
+    //  O(n*log(n))
+    return sharedSet;
 }
 template <typename T>
 std::set<T> setUnion(std::set<T>& s1, std::set<T>& s2)
 {
-
-
-
-
-
+    
+    std::set<T> joinedSet = s1;
+    // Since nothing will happen when inserting an element that already exists, we can just power through
+    for(typename std::set<T>::iterator it = s2.begin(); it != s2.end(); ++it) {  // n iterations
+        joinedSet.insert(*it);  // Each insert takes O(log(m)) time
+    }
+    // O(n*log(n))
+    return joinedSet;
 }
 
 /***********************************************/

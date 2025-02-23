@@ -4,6 +4,8 @@
 #include <iostream>
 #include "product.h"
 
+// COMPLETE
+
 class ProductParser
 {
 public:

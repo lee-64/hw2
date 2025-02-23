@@ -9,6 +9,7 @@
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "mydatastore.h"
 
 using namespace std;
 struct ProdNameSorter {
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
 
@@ -100,9 +101,79 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
+            else if(cmd == "ADD") {
+                string username;
+                string hitResultStr;
+                ss >> username >> hitResultStr;
+                int hitResultIndex = stoi(hitResultStr);
 
+                // Check if the username exists and the hit result index is in bounds
+                if(ds.usernameExists(username) && hitResultIndex > 0 && hitResultIndex <= int(hits.size())) {
+                    ds.addToCart(username, hits[hitResultIndex - 1]);
+                }
+                else {
+                    cout << "Invalid request" << endl;
+                }
+            }
 
+            else if(cmd == "VIEWCART") {
+                string username;
+                ss >> username;
 
+                // Check if the username exists
+                if(ds.usernameExists(username)) {
+                    std::queue<Product*> cart = ds.getUserCart(username);
+
+                    // Pretty print
+                    int numProducts = 1;
+                    while(!cart.empty()) {
+                        cout << numProducts << " " << cart.front()->getName() << " " << cart.front()->getPrice() << endl;
+                        cart.pop();
+                        numProducts++;
+                    }
+                }
+                else {
+                    cout << "Invalid username" << endl;
+                }
+            }
+
+            else if(cmd == "BUYCART") {
+                string username;
+                ss >> username;
+
+                // Check if the username exists
+                if(ds.usernameExists(username)) {
+                    std::queue<Product*> cart = ds.getUserCart(username);
+                    std::vector<Product*> unpurchased;
+                    size_t originalCartSize = cart.size();
+
+                    for(size_t i=0; i < originalCartSize; ++i) {
+                        Product* curProduct = cart.front();
+                        User* curUser = ds.usernameToUser(username);
+                        bool inStock = ds.inStock(curProduct);
+
+                        // If the item is in stock and the user has enough money
+                        if(inStock && curUser->getBalance() - curProduct->getPrice() >= 0) {
+                            curProduct->subtractQty(1);  // In-stock quantity is reduced by 1
+                            curUser->deductAmount(curProduct->getPrice());  // Product price is debited from the user's available credit
+                            cart.pop();  // Remove the item from the cart
+                        }
+                        else {
+                            unpurchased.push_back(curProduct);
+                            cart.pop();
+                        }
+                    }
+                    // Restore the cart by bringing all unpurchased items back into it
+                    for(size_t i=0; i < unpurchased.size(); ++i) {
+                        cart.push(unpurchased[i]);
+                    }
+                    ds.updateUserCart(username, cart);
+                }
+                
+                else {
+                    cout << "Invalid username" << endl;
+                }
+            }
 
             else {
                 cout << "Unknown command" << endl;

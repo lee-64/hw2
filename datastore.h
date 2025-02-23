@@ -1,12 +1,13 @@
 #ifndef DATASTORE_H
 #define DATASTORE_H
 #include <string>
-#include <set>
 #include <vector>
 #include "product.h"
 #include "user.h"
 
 /**
+ * COMPLETE
+ * 
  * DataStore Interface needed for parsing and instantiating products and users
  *
  * A derived version of the DataStore can provide other services as well but
