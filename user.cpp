@@ -1,4 +1,5 @@
 #include "user.h"
+#include <iomanip>
 using namespace std;
 
 // COMPLETE
@@ -36,5 +37,6 @@ void User::deductAmount(double amt)
 
 void User::dump(std::ostream& os)
 {
+    os << fixed << setprecision(2);
     os << name_ << " "  << balance_ << " " << type_ << endl;
 }
