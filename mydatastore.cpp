@@ -4,18 +4,12 @@
 #include <set>
 
 
+MyDataStore::MyDataStore() {}
+
 // Destructor
 MyDataStore::~MyDataStore() {
-    // Delete all Products stored in keywordMap_, first bringing them all into a single set
-    std::set<Product*> allProducts;
-    for(std::map<std::string, std::set<Product*>>::iterator it = keywordMap_.begin(); it != keywordMap_.end(); ++it) {
-        for(std::set<Product*>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
-            allProducts.insert(*it2);
-        }
-    }
-    
     // Delete every Product
-    for(std::set<Product*>::iterator it = allProducts.begin(); it != allProducts.end(); ++it) {
+    for(std::vector<Product*>::iterator it = products_.begin(); it != products_.end(); ++it) {
         delete *it;
     }
 
@@ -25,15 +19,18 @@ MyDataStore::~MyDataStore() {
     }
 
     // Clear the leftover data members
+    products_.clear();
+    users_.clear();
     keywordMap_.clear();
     usersCarts_.clear();
-    users_.clear();
 }
 
 /**
  * Adds a product to the data store
  */
 void MyDataStore::addProduct(Product* p) {
+    products_.push_back(p);
+
     std::set<std::string> productKeywords = p->keywords();
     for(std::set<std::string>::iterator it = productKeywords.begin(); it != productKeywords.end(); ++it) {
         keywordMap_[convToLower(*it)].insert(p);
@@ -177,6 +174,17 @@ void MyDataStore::updateUserCart(std::string& username, std::queue<Product*> new
  * Reproduce the database file from the current Products and User values
  */
 void MyDataStore::dump(std::ostream& ofile) {
-    ofile << "DUMPING" << std::endl;
+    ofile << "<products>" << std::endl;
+    for(size_t i=0; i < products_.size(); ++i) {
+        products_[i]->dump(ofile);
+    }
+    ofile << "</products>" << std::endl;
+
+    ofile << "<users>" << std::endl;
+    for(size_t i=0; i < users_.size(); ++i) {
+        users_[i]->dump(ofile);
+    }
+    ofile << "</users>" << std::endl;
+
 
 }

@@ -9,20 +9,11 @@
 #include "user.h"
 #include "datastore.h"
 
-/**
- * COMPLETE
- * 
- * DataStore Interface needed for parsing and instantiating products and users
- *
- * A derived version of the DataStore can provide other services as well but
- * must support those below
- *
- * DO NOT EDIT
- */
 
 
 class MyDataStore : public DataStore {
     public:
+        MyDataStore();
         ~MyDataStore();
 
         /**
@@ -68,6 +59,7 @@ class MyDataStore : public DataStore {
          */
         void dump(std::ostream& ofile) override;
     private:
+        std::vector<Product*> products_;
         std::vector<User*> users_;
         std::map<std::string, std::queue<Product*>> usersCarts_;  // map of {username string: queue(product objects added to their cart (maintain FIFO)), ...}
         std::map<std::string, std::set<Product*>> keywordMap_;  // map of {keywords: set(product objects with that keyword), ...}
