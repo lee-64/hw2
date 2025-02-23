@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <string>
 #include <set>
 #include "book.h"
@@ -27,7 +28,10 @@ std::set<std::string> Book::keywords() const {
 }
 
 std::string Book::displayString() const {
-    std::string output = name_ + "\nAuthor: " + author_ + " ISBN: " + isbn_ + "\n" + std::to_string(price_)+ " " + std::to_string(qty_) + " left.";
+    std::ostringstream price;
+    price << std::fixed << std::setprecision(2) << price_;
+
+    std::string output = name_ + "\nAuthor: " + author_ + " ISBN: " + isbn_ + "\n" + price.str() + " " + std::to_string(qty_) + " left.";
     return output;
 }
 

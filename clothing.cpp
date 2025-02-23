@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <string>
 #include <set>
 #include "clothing.h"
@@ -27,7 +28,10 @@ std::set<std::string> Clothing::keywords() const {
 }
 
 std::string Clothing::displayString() const {
-    std::string output = name_ + "\nSize: " + size_ + " Brand: " + brand_ + "\n" + std::to_string(price_)+ " " + std::to_string(qty_) + " left.";
+    std::ostringstream price;
+    price << std::fixed << std::setprecision(2) << price_;
+
+    std::string output = name_ + "\nSize: " + size_ + " Brand: " + brand_ + "\n" + price.str() + " " + std::to_string(qty_) + " left.";
     return output;
 }
 

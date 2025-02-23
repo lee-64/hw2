@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
                     // Pretty print
                     int numProducts = 1;
                     while(!cart.empty()) {
-                        cout << numProducts << " " << cart.front()->getName() << " " << cart.front()->getPrice() << endl;
+                        cout << "Item " << numProducts << " " << cart.front()->getName() << " " << cart.front()->getPrice() << endl;
                         cart.pop();
                         numProducts++;
                     }
