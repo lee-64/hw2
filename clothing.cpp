@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <set>
 #include "clothing.h"
@@ -41,6 +42,7 @@ void Clothing::dump(std::ostream& os) const {
         J. Crew
     */
 
+    os << std::fixed << std::setprecision(2);
     os << category_ << "\n" << name_ << "\n" << price_ << "\n" << qty_ << "\n" << size_ << "\n" << brand_ << std::endl;
 }
 

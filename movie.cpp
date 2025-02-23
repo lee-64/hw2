@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <set>
 #include "movie.h"
@@ -41,6 +42,7 @@ void Movie::dump(std::ostream& os) const {
         PG
     */
 
+    os << std::fixed << std::setprecision(2);
     os << category_ << "\n" << name_ << "\n" << price_ << "\n" << qty_ << "\n" << genre_ << "\n" << rating_ << std::endl;
 }
 

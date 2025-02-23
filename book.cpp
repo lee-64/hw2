@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <set>
 #include "book.h"
@@ -41,6 +42,7 @@ void Book::dump(std::ostream& os) const {
         Tommy Trojan
     */
 
+    os << std::fixed << std::setprecision(2);
     os << category_ << "\n" << name_ << "\n" << price_ << "\n" << qty_ << "\n" << isbn_ << "\n" << author_ << std::endl;
 }
 
