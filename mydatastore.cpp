@@ -3,9 +3,32 @@
 #include <string>
 #include <set>
 
-// MyDataStore::~MyDataStore() {
-//     delete users_;
-// }
+
+// Destructor
+MyDataStore::~MyDataStore() {
+    // Delete all Products stored in keywordMap_, first bringing them all into a single set
+    std::set<Product*> allProducts;
+    for(std::map<std::string, std::set<Product*>>::iterator it = keywordMap_.begin(); it != keywordMap_.end(); ++it) {
+        for(std::set<Product*>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            allProducts.insert(*it2);
+        }
+    }
+    
+    // Delete every Product
+    for(std::set<Product*>::iterator it = allProducts.begin(); it != allProducts.end(); ++it) {
+        delete *it;
+    }
+
+    // Delete every User
+    for(std::vector<User*>::iterator it = users_.begin(); it != users_.end(); ++it) {
+        delete *it;
+    }
+
+    // Clear the leftover data members
+    keywordMap_.clear();
+    usersCarts_.clear();
+    users_.clear();
+}
 
 /**
  * Adds a product to the data store
@@ -129,6 +152,7 @@ bool MyDataStore::sufficientBal(std::string& username, Product* p) {
     return false;
 }
 
+
 // Convert a username to a User object
 User* MyDataStore::usernameToUser(std::string& username) {
     for(size_t i=0; i < users_.size(); ++i) {
@@ -138,6 +162,7 @@ User* MyDataStore::usernameToUser(std::string& username) {
     }
     return nullptr;
 }
+
 
 // Reset the user's old cart and replace it with their new cart (ie any unpurchased items left in the cart after BUYCART)
 void MyDataStore::updateUserCart(std::string& username, std::queue<Product*> newCart) {
